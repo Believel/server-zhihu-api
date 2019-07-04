@@ -1,0 +1,28 @@
+{
+  "name": "server-zhihu-api",
+  "version": "1.0.0",
+  "description": "RESTfull api",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Believel/server-zhihu-api.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "Believel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Believel/server-zhihu-api/issues"
+  },
+  "homepage": "https://github.com/Believel/server-zhihu-api#readme",
+  "dependencies": {
+    "koa": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
