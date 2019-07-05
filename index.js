@@ -1,11 +1,14 @@
 var Koa = require('koa')
+var Router = require('koa-router')
+// 创建一个Koa应用实例
 var app = new Koa()
+// 创建一个路由实例
+var router = new Router()
 
-app.use(async (ctx, next) => {
-  ctx.body = 'hello zhihu'
-  await next()
+router.get('/', (ctx, next) => {
+  ctx.body = '哈哈'
 })
 
-
+app.use(router.routes())
 
 app.listen(3000)
