@@ -5,20 +5,8 @@ var app = new Koa()
 // 创建一个路由实例
 var router = new Router()
 
-<<<<<<< HEAD
-app.use(async (ctx, next) => {
-  console.log(ctx)
-  await next()
-})
-
-// 路由中间件的作用：
-// 1. 处理不同的URL
-// 2. 处理不同的HTTP方法
-// 3. 解析URL上的参数
-=======
 // 创建一个以/users前缀的路由实例
 const usersRouter = new Router({prefix: '/users'})
->>>>>>> b69af665d3b8616fb6dc419659f7585d016231c6
 
 router.get('/', (ctx, next) => {
   ctx.body = '哈哈'
