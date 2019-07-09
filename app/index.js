@@ -2,11 +2,19 @@ const Koa = require("koa");
 const bodyParser = require("koa-bodyparser"); // 接收body请求体
 const error = require('koa-json-error') // json格式处理错误
 const parameter = require('koa-parameter'); // 参数校验
+const mongoose = require('mongoose')
 // 创建一个Koa应用实例
 var app = new Koa();
 const routing = require("./routes");
+const {
+  connectionStr
+} = require('./config')
 const PORT = process.env.PORT || 3000;
 
+mongoose.connect(connectionStr, {
+  useNewUrlParser: true
+}, () => console.log('MongoDB 连接成功'))
+mongoose.connection.on('error', console.error)
 // 错误处理中间件，其中404错误捕捉不到
 // app.use(async (ctx, next) => {
 //   try {

@@ -6,11 +6,13 @@ const router = new Router({
 var {
   findUsers,
   findUser,
-  createUser
+  createUser,
+  deleteUser
 } = require('../controllers/users')
 
 router.get('/', findUsers)
 router.get('/:id', findUser)
 router.post('/create', createUser)
+router.delete('/:id', deleteUser)
 
 module.exports = router

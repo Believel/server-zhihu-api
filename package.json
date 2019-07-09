@@ -21,12 +21,15 @@
   },
   "homepage": "https://github.com/Believel/server-zhihu-api#readme",
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-json-error": "^3.1.2",
+    "koa-jwt": "^3.5.1",
     "koa-parameter": "^3.0.1",
     "koa-router": "^7.4.0",
-    "mongoose": "^5.6.3"
+    "koa-static": "^5.0.0",
+    "mongoose": "^5.4.20"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
