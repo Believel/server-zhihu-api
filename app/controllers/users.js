@@ -20,16 +20,35 @@ class UsersContriller {
         type: 'string',
         required: true
       },
-      password: { type: 'string', required: true }
+      password: {
+        type: 'string',
+        required: true
+      }
     })
-    let {name} = ctx.request.body;
-    let repeatUser =await User.findOne({ name })
+    let {
+      name
+    } = ctx.request.body;
+    let repeatUser = await User.findOne({
+      name
+    })
     if (repeatUser) {
       ctx.throw(409, '用户已存在')
     }
     const user = await new User(ctx.request.body).save()
-    let  {_id} = user
-    ctx.body = {_id, name}
+    let {
+      _id
+    } = user
+    ctx.body = {
+      _id,
+      name
+    }
+  }
+  // 授权
+  async checkOwner(ctx, next) {
+    if (ctx.params.id !== ctx.state.user._id) {
+      ctx.throw(403, '没有权限')
+    }
+    await next()
   }
   // 更新文档信息
   async updateUser(ctx) {
