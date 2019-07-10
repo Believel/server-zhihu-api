@@ -18,10 +18,11 @@ var {
 // 编写认证中间件
 const Auth = async (ctx, next) => {
   let {
-    Authorization = ''
-  } = ctx.request.headers
-  let token = Authorization.replace('Bearer ', '');
+    authorization = ''
+  } = ctx.headers
+  let token = authorization.replace('Bearer ', '');
   try {
+    // 验证用户信息是否正确
     const user = jsonwebtoen.verify(token, secret);
     ctx.state.user = user
   } catch (err) {
