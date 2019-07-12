@@ -12,7 +12,8 @@ var {
   findUser,
   createUser,
   deleteUser,
-  checkOwner
+  checkOwner,
+  updateUser
 } = require('../controllers/users')
 
 // 编写认证中间件
@@ -33,6 +34,7 @@ const Auth = async (ctx, next) => {
 router.get('/', findUsers)
 router.get('/:id', findUser)
 router.post('/create', createUser)
+router.patch('/:id', Auth, checkOwner, updateUser)
 router.delete('/:id', Auth, checkOwner, deleteUser)
 
 module.exports = router
