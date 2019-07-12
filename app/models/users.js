@@ -37,6 +37,12 @@ const userSchema = new Schema({
       graducation_year: { type: Number }
     }],
     select: false
+  },
+  // 关注
+  following: {
+    //! 存储用户id, 引用User集合
+    type:[{ type: Schema.Types.ObjectId, ref: "User" }],
+    select: false
   }
 })
 // 'User' 将成为mongoDB中的文档集合(collection)

@@ -83,5 +83,12 @@ class UsersContriller {
     ctx.status = 204
 
   }
+  // 获取关注者与粉丝
+  async listFolling(ctx) {
+    //! populate() 指定特定字段关联查询 
+    const user = await User.findById(ctx.params.id).select('+following').populate('following')
+    if(!user) ctx.throw(404);
+    ctx.body = user.following;
+  }
 }
 module.exports = new UsersContriller()
