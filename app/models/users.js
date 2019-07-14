@@ -16,34 +16,39 @@ const userSchema = new Schema({
   // 一句话介绍
   headline: { type: String },
   // 居住地
-  locations: { type: [{type: String}], select: false},
+  locations: { type: [{type: Schema.Types.ObjectId, ref: 'Topic'}], select: false},
   // 所在行业
-  business: { type: String, select: false},
+  business: { type: Schema.Types.ObjectId, ref: 'Topic', select: false},
   // 职业经历
   employments: {
     type: [{
-      company:{ type: String },
-      job: { type: String }
+      company:{ type: Schema.Types.ObjectId, ref: 'Topic' },
+      job: { type: Schema.Types.ObjectId, ref: 'Topic' }
     }],
     select: false
   },
   // 教育经历
   educations:{
     type: [{
-      school: { type: String },
-      major: { type: String },
+      school: { type: Schema.Types.ObjectId, ref: 'Topic' },
+      major: { type: Schema.Types.ObjectId, ref: 'Topic' },
       diploma: { type:Number, enum:[1, 2, 3, 4, 5] },
       entrance_year: { type:Number },
       graducation_year: { type: Number }
     }],
     select: false
   },
-  // 关注
+  // 关注人
   following: {
     //! 存储用户id, 引用User集合
     type:[{ type: Schema.Types.ObjectId, ref: "User" }],
     select: false
-  }
+  },
+  // 关注话题
+  followingTopics: {
+    type:[{ type: Schema.Types.ObjectId, ref: "Topic" }],
+    select: false
+  },
 })
 // 'User' 将成为mongoDB中的文档集合(collection)
 module.exports = model('User', userSchema)  

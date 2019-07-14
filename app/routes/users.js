@@ -14,7 +14,11 @@ var {
   deleteUser,
   checkOwner,
   updateUser,
-  listFolling
+  listFollowing,
+  listFollwers,
+  follow,
+  unfollow,
+  checkUserExist
 } = require('../controllers/users')
 
 // 编写认证中间件
@@ -37,6 +41,8 @@ router.get('/:id', findUser)
 router.post('/create', createUser)
 router.patch('/:id', Auth, checkOwner, updateUser)
 router.delete('/:id', Auth, checkOwner, deleteUser)
-router.get('/:id/following', listFolling)
-
+router.get('/:id/following', listFollowing)
+router.get('/:id/followers', listFollwers)
+router.put('/following/:id', Auth, checkUserExist, follow)
+router.delete('/following/:id', Auth, checkUserExist, unfollow)
 module.exports = router
