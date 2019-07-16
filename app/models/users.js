@@ -48,7 +48,7 @@ const userSchema = new Schema({
   followingTopics: {
     type:[{ type: Schema.Types.ObjectId, ref: "Topic" }],
     select: false
-  },
+  }
 })
 // 'User' 将成为mongoDB中的文档集合(collection)
 module.exports = model('User', userSchema)  

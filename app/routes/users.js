@@ -18,8 +18,13 @@ var {
   listFollwers,
   follow,
   unfollow,
-  checkUserExist
+  checkUserExist,
+  followTopic,
+  unfollowTopic,
+  listFollowingTopics,
+  listQuestions
 } = require('../controllers/users')
+var { checkTopicExist } = require('../controllers/topics')
 
 // 编写认证中间件
 const Auth = async (ctx, next) => {
@@ -30,6 +35,7 @@ const Auth = async (ctx, next) => {
   try {
     // 验证用户信息是否正确
     const user = jsonwebtoen.verify(token, secret);
+    // 存储用户的信息
     ctx.state.user = user
   } catch (err) {
     ctx.throw(401, err.message)
@@ -45,4 +51,10 @@ router.get('/:id/following', listFollowing)
 router.get('/:id/followers', listFollwers)
 router.put('/following/:id', Auth, checkUserExist, follow)
 router.delete('/following/:id', Auth, checkUserExist, unfollow)
+// id是话题的_id
+router.put('/followingTopic/:id', Auth, checkTopicExist, followTopic)
+router.delete('/followingTopic/:id', Auth, checkTopicExist, unfollowTopic)
+router.get('/:id/followingTopic', listFollowingTopics)
+// 获得用户问题列表
+router.get('/:id/questions', listQuestions)
 module.exports = router

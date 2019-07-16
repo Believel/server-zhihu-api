@@ -1,4 +1,6 @@
 const Topic = require('../models/topics')
+const User = require('../models/users')
+const Questions = require('../models/questions')
 class TopicsContriller {
   // 获取话题列表
   async find(ctx) {
@@ -53,6 +55,31 @@ class TopicsContriller {
       ctx.throw(404, '话题不存在')
     }
     ctx.body = topic
+  }
+  // 删除话题
+  async delete(ctx) {
+      const topic = await Topic.findByIdAndRemove(ctx.params.id);
+      if (!topic) {
+        ctx.throw(404, '话题不存在')
+      }
+      ctx.status = 204
+  }
+  // 检验话题是否存在
+  async checkTopicExist(ctx, next) {
+    const topic = await Topic.findById(ctx.params.id) 
+    if(!topic) ctx.throw(404, '用户不存在')
+    await next()
+  }
+  // 获取话题关注者列表
+  async listFollwers(ctx) {
+    const users = await User.find({followingTopics: ctx.params.id})
+    ctx.body = users
+  }
+  // 话题的问题列表接口
+  async listQuestions(ctx) {
+    // 只有问题的话题包含话题就行
+    const questions = await Questions.find({topics: ctx.params.id})
+    ctx.body = questions
   }
 }
 module.exports = new TopicsContriller()

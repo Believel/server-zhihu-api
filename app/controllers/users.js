@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const Question = require('../models/questions')
 class UsersContriller {
   // 查询列表 —— 字段过滤(在设计表的时候设置 select:false 即可)
   async findUsers(ctx) {
@@ -144,6 +145,40 @@ class UsersContriller {
       me.save()
     }
     ctx.status = 204;
+  }
+  // 关注话题
+  async followTopic(ctx) {
+    // 获取我的关注列表
+    const me = await User.findById(ctx.state.user._id).select('+followingTopics');
+    // 如果不在我的关注列表中就push进去
+    if(!me.followingTopics.map(id=> id.toString()).includes(ctx.params.id)) {
+      me.followingTopics.push(ctx.params.id);
+      // 保存到数据库中
+      me.save();
+    }
+    ctx.status = 204;
+  }
+  // 取消关注话题
+  async unfollowTopic(ctx) {
+    let me = await User.findById(ctx.state.user._id).select('+followingTopics');
+    let index = me.followingTopics.map(id => id.toString()).indexOf(ctx.params.id)
+    if(index > -1) {
+      me.followingTopics.splice(index, 1)
+      me.save()
+    }
+    ctx.status = 204;
+  }
+  // 获取某个人的关注的话题列表
+  async listFollowingTopics(ctx) {
+    //! populate() 指定特定字段关联查询,多个字段使用空格隔开 
+    const user = await User.findById(ctx.params.id).select('+followingTopics').populate('followingTopics')
+    if(!user) ctx.throw(404);
+    ctx.body = user.followingTopics;
+  }
+  // 用户问题列表
+  async listQuestions(ctx) {
+    const questions = await Question.find({questioner: ctx.params.id})
+    ctx.body = questions
   }
 }
 module.exports = new UsersContriller()
