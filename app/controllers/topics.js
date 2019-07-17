@@ -1,7 +1,7 @@
 const Topic = require('../models/topics')
 const User = require('../models/users')
 const Questions = require('../models/questions')
-class TopicsContriller {
+class TopicsController {
   // 获取话题列表
   async find(ctx) {
     //! 分页
@@ -82,4 +82,4 @@ class TopicsContriller {
     ctx.body = questions
   }
 }
-module.exports = new TopicsContriller()
+module.exports = new TopicsController()

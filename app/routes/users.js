@@ -14,17 +14,16 @@ var {
   deleteUser,
   checkOwner,
   updateUser,
-  listFollowing,
-  listFollwers,
-  follow,
-  unfollow,
+  listFollowing, listFollwers,  follow, unfollow,
   checkUserExist,
-  followTopic,
-  unfollowTopic,
-  listFollowingTopics,
-  listQuestions
+  followTopic, unfollowTopic, listFollowingTopics,
+  listQuestions,
+  likingAnswer, unLikingAnswer, listLikingAnswers,
+  disLikingAnswer, undisLikingAnswer,  listdisLikingAnswers,
+  collectAnswer, unCollectAnswer, listCollectAnswers
 } = require('../controllers/users')
 var { checkTopicExist } = require('../controllers/topics')
+var { checkAnswerExist } = require('../controllers/answers')
 
 // 编写认证中间件
 const Auth = async (ctx, next) => {
@@ -51,10 +50,22 @@ router.get('/:id/following', listFollowing)
 router.get('/:id/followers', listFollwers)
 router.put('/following/:id', Auth, checkUserExist, follow)
 router.delete('/following/:id', Auth, checkUserExist, unfollow)
-// id是话题的_id
+// 最后id是话题的_id
 router.put('/followingTopic/:id', Auth, checkTopicExist, followTopic)
 router.delete('/followingTopic/:id', Auth, checkTopicExist, unfollowTopic)
 router.get('/:id/followingTopic', listFollowingTopics)
 // 获得用户问题列表
 router.get('/:id/questions', listQuestions)
+// 最后id是答案的_id (赞和踩是互斥关系)
+router.put('/likingAnswer/:id', Auth, checkAnswerExist, likingAnswer, undisLikingAnswer)
+router.delete('/likingAnswer/:id', Auth, checkAnswerExist, unLikingAnswer)
+router.get('/:id/likingAnswer', listLikingAnswers)
+
+router.put('/disLikingAnswer/:id', Auth, checkAnswerExist, disLikingAnswer, unLikingAnswer)
+router.delete('/disLikingAnswer/:id', Auth, checkAnswerExist, undisLikingAnswer)
+router.get('/:id/disLikingAnswer', listdisLikingAnswers)
+
+router.put('/collectingAnswer/:id', Auth, checkAnswerExist, collectAnswer)
+router.delete('/collectingAnswer/:id', Auth, checkAnswerExist, unCollectAnswer)
+router.get('/:id/collectingAnswer', listCollectAnswers)
 module.exports = router

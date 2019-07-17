@@ -48,6 +48,21 @@ const userSchema = new Schema({
   followingTopics: {
     type:[{ type: Schema.Types.ObjectId, ref: "Topic" }],
     select: false
+  },
+  // 赞答案
+  likingAnswers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Answer'}],
+    select: false
+  },
+  // 踩过的答案
+  disLikingAnswers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Answer'}],
+    select: false
+  },
+  // 收藏答案
+  collectingAnswers: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Answer'}],
+    select: false
   }
 })
 // 'User' 将成为mongoDB中的文档集合(collection)

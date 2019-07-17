@@ -1,6 +1,7 @@
 const User = require('../models/users')
 const Question = require('../models/questions')
-class UsersContriller {
+const Answer = require('../models/answers')
+class UsersController {
   // 查询列表 —— 字段过滤(在设计表的时候设置 select:false 即可)
   async findUsers(ctx) {
     let { per_page = 10 } = ctx.query
@@ -180,5 +181,99 @@ class UsersContriller {
     const questions = await Question.find({questioner: ctx.params.id})
     ctx.body = questions
   }
+  // 点赞答案
+   async likingAnswer(ctx, next) {
+    // 获取我的点赞列表
+    const me = await User.findById(ctx.state.user._id).select('+likingAnswers');
+    // 如果不在我的点赞列表中就push进去
+    if(!me.likingAnswers.map(id=> id.toString()).includes(ctx.params.id)) {
+      me.likingAnswers.push(ctx.params.id);
+      // 保存到数据库中
+      me.save();
+      //! 修改答案的投票数（增加1）
+      await Answer.findByIdAndUpdate(ctx.params.id, { $inc: { voteCount: 1} } )
+    }
+    ctx.status = 204;
+    await next();
+  }
+  // 取消点赞答案
+  async unLikingAnswer(ctx) {
+    let me = await User.findById(ctx.state.user._id).select('+likingAnswers');
+    let index = me.likingAnswers.map(id => id.toString()).indexOf(ctx.params.id)
+    if(index > -1) {
+      me.likingAnswers.splice(index, 1);
+      me.save();
+      // ! 修改答案的投票数（减少1）
+      await Answer.findByIdAndUpdate(ctx.params.id, { $inc: { voteCount: -1}})
+    }
+    ctx.status = 204;
+  }
+  // 获取某个人的喜欢的答案列表
+  async listLikingAnswers(ctx) {
+    //! populate() 指定特定字段关联查询,多个字段使用空格隔开 
+    const user = await User.findById(ctx.params.id).select('+likingAnswers').populate('likingAnswers')
+    if(!user) ctx.throw(404);
+    ctx.body = user.likingAnswers;
+  }
+  // 踩答案
+  async disLikingAnswer(ctx, next) {
+    // 获取我的点赞列表
+    const me = await User.findById(ctx.state.user._id).select('+disLikingAnswers');
+    // 如果不在我的点赞列表中就push进去
+    if(!me.disLikingAnswers.map(id=> id.toString()).includes(ctx.params.id)) {
+      me.disLikingAnswers.push(ctx.params.id);
+      // 保存到数据库中
+      me.save();
+    }
+    ctx.status = 204;
+    await next();
+  }
+  // 取消踩答案
+  async undisLikingAnswer(ctx) {
+    let me = await User.findById(ctx.state.user._id).select('+disLikingAnswers');
+    let index = me.disLikingAnswers.map(id => id.toString()).indexOf(ctx.params.id)
+    if(index > -1) {
+      me.disLikingAnswers.splice(index, 1);
+      me.save();
+    }
+    ctx.status = 204;
+  }
+  // 获取某个人的踩答案列表
+  async listdisLikingAnswers(ctx) {
+    //! populate() 指定特定字段关联查询,多个字段使用空格隔开 
+    const user = await User.findById(ctx.params.id).select('+disLikingAnswers').populate('disLikingAnswers')
+    if(!user) ctx.throw(404);
+    ctx.body = user.disLikingAnswers;
+  }
+  // 收藏答案
+  async collectAnswer(ctx, next) {
+    // 获取我的收藏列表
+    const me = await User.findById(ctx.state.user._id).select('+collectingAnswers');
+    // 如果不在我的收藏列表中就push进去
+    if(!me.collectingAnswers.map(id=> id.toString()).includes(ctx.params.id)) {
+      me.collectingAnswers.push(ctx.params.id);
+      // 保存到数据库中
+      me.save();
+    }
+    ctx.status = 204;
+    await next();
+  }
+  // 取消收藏答案
+  async unCollectAnswer(ctx) {
+    let me = await User.findById(ctx.state.user._id).select('+collectingAnswers');
+    let index = me.collectingAnswers.map(id => id.toString()).indexOf(ctx.params.id)
+    if(index > -1) {
+      me.collectingAnswers.splice(index, 1);
+      me.save();
+    }
+    ctx.status = 204;
+  }
+  // 获取某个人的收藏答案列表
+  async listCollectAnswers(ctx) {
+    //! populate() 指定特定字段关联查询,多个字段使用空格隔开 
+    const user = await User.findById(ctx.params.id).select('+collectingAnswers').populate('collectingAnswers')
+    if(!user) ctx.throw(404);
+    ctx.body = user.collectingAnswers;
+  }
 }
-module.exports = new UsersContriller()
+module.exports = new UsersController()

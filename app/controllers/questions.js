@@ -1,6 +1,6 @@
 const Question = require('../models/questions')
 const User = require('../models/users')
-class TopicsContriller {
+class QuestionController {
   // 获取问题列表
   async find(ctx) {
     //! 分页
@@ -24,8 +24,8 @@ class TopicsContriller {
   // 检验问题是否存在
   async checkQuestionExist(ctx, next) {
     const question = await Question.findById(ctx.params.id).select('+questioner')
-    ctx.state.question = question
     if(!question) ctx.throw(404, '问题不存在')
+    ctx.state.question = question
     await next()
   }
   // 查询特定问题
@@ -84,4 +84,4 @@ class TopicsContriller {
     ctx.status = 204
   }
 }
-module.exports = new TopicsContriller()
+module.exports = new QuestionController()
