@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const jwt = require('koa-jwt')
 const { secret } = require('../config')
-// 创建一个以 /users 为前缀的路由
+// ! 二级嵌套
 const router = new Router({
   prefix: '/questions/:questionId/answers'
 })

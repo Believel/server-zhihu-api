@@ -13,6 +13,6 @@ const answerSchema = new Schema({
   questionId: { type: String, required: true },
   // 投票数
   voteCount: { type: Number, required: true, default: 0 }
-})
+}, { timestamps: true})
 // 'Answer' 将成为mongoDB中的文档集合(collection)
 module.exports = model('Answer', answerSchema)  

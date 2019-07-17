@@ -64,6 +64,6 @@ const userSchema = new Schema({
     type: [{ type: Schema.Types.ObjectId, ref: 'Answer'}],
     select: false
   }
-})
+}, { timestamps: true})
 // 'User' 将成为mongoDB中的文档集合(collection)
 module.exports = model('User', userSchema)  

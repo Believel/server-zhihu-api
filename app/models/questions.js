@@ -14,6 +14,6 @@ const questionSchema = new Schema({
     type: [{ type: Schema.Types.ObjectId, ref: 'Topic',}], 
     select: false
   }
-})
+}, { timestamps: true})
 // 'Topic' 将成为mongoDB中的文档集合(collection)
 module.exports = model('Question', questionSchema)  
